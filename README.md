@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/Nico-Mayer/git-differ/main/public/logo.png" alt="logo" width='650'/>
+<img src="https://raw.githubusercontent.com/Nico-Mayer/git-differ/main/public/logo.png" alt="logo" />
 <h1>Git Differ</h1>
 </p>
 
