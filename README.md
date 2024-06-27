@@ -4,7 +4,7 @@
 </p>
 
 <p align='center'>
-  <img src="https://github.com/antfu/vscode-iconify/blob/main/screenshots/preview-1.png?raw=true" alt='preview'>
+  <img src="https://raw.githubusercontent.com/Nico-Mayer/git-differ/main/public/showcase.gif" alt='preview'>
 </p>
 
 ### About
