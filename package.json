@@ -1,41 +1,54 @@
 {
-  "name": "git-differ",
-  "displayName": "Git differ",
-  "description": "Easily compare project file differences across multiple branches using the context menu.",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.90.0"
-  },
+  "activationEvents": [],
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "git-differ.helloWorld",
-        "title": "Hello World"
+        "category": "Git",
+        "command": "git-differ.compareWithBranch",
+        "title": "Git Differ: Compare with Branch..."
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "git-differ.compareWithBranch",
+          "group": "Git@15",
+          "when": "!explorerResourceIsFolder"
+        }
+      ]
+    }
   },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "vscode-test"
-  },
+  "description": "Easily compare project file differences across multiple branches using the context menu.",
   "devDependencies": {
-    "@types/vscode": "^1.90.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "20.x",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0"
-  }
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "displayName": "Git differ",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "main": "./out/extension.js",
+  "name": "git-differ",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test": "vscode-test",
+    "vscode:prepublish": "npm run compile",
+    "watch": "tsc -watch -p ./"
+  },
+  "version": "0.0.1"
 }
