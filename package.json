@@ -11,6 +11,16 @@
         "title": "Git Differ: Compare with Branch..."
       }
     ],
+    "configuration": {
+      "title": "GitDiffer",
+      "properties": {
+        "git-differ.localOnly": {
+          "default": false,
+          "description": "If turned on, only local branches will be shown in the compare with branch menu.",
+          "type": "boolean"
+        }
+      }
+    },
     "menus": {
       "explorer/context": [
         {
@@ -21,6 +31,8 @@
       ]
     }
   },
+  "homepage": "https://github.com/Nico-Mayer",
+  "readme": "README.md",
   "description": "Easily compare project file differences across multiple branches using the context menu.",
   "devDependencies": {
     "@types/mocha": "^10.0.6",
@@ -40,8 +52,25 @@
   "extensionDependencies": [
     "vscode.git"
   ],
+  "icon": "public/logo_small.png",
+  "keywords": [
+    "git",
+    "diff",
+    "menu",
+    "branch",
+    "compare",
+    "compare with branch",
+    "compare branch",
+    "context menu"
+  ],
+  "license": "MIT",
   "main": "./out/extension.js",
   "name": "git-differ",
+  "publisher": "nico-mayer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nico-Mayer/git-differ"
+  },
   "scripts": {
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",

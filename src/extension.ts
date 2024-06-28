@@ -6,10 +6,13 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.extensions.getExtension<GitExtension>("vscode.git")!.exports;
   const gitApi: API = gitExtension.getAPI(1);
 
+  const config = vscode.workspace.getConfiguration("git-differ");
+  const localOnly = config.get<boolean>("localOnly", false);
+
   const compareWithBranch = vscode.commands.registerCommand(
     "git-differ.compareWithBranch",
     async (uri: vscode.Uri) => {
-      const branches = await getBranches(gitApi, uri, true);
+      const branches = await getBranches(gitApi, uri, !localOnly);
       const branchNames = branches
         .map((branch) => branch.name)
         .filter((name): name is string => !!name);

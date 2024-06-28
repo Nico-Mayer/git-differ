@@ -1,6 +1,8 @@
 <p align="center">
 <img src="https://raw.githubusercontent.com/Nico-Mayer/git-differ/main/public/logo.png" alt="logo" heigh="256" width="256" />
+<a href="https://marketplace.visualstudio.com/items?itemName=nico-mayer.git-differ">
 <h1>Git Differ</h1>
+</a>
 </p>
 
 <p align='center'>
@@ -19,6 +21,10 @@ This lightweight and speedy VS Code extension allows you to effortlessly compare
 ### Upcoming
 
 - Optional inline or status bar Git blame
+
+### Download
+
+[Marketplace](https://marketplace.visualstudio.com/items?itemName=nico-mayer.git-differ)
 
 ## License
 
