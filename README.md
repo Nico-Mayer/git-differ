@@ -18,9 +18,11 @@ This lightweight and speedy VS Code extension allows you to effortlessly compare
 - View file differences directly from the context menu
 - Extremely lightweight without unnecessary features
 
-### Upcoming
+### Roadmap
 
-- Optional inline or status bar Git blame
+- Compare changes with commits on the current branch (next-up)
+- Compare the latest commit on the current branch to any commit in another branch using SHA ID (low-prio)
+- Statusbar Git blame (low-prio)
 
 ### Download
 
