@@ -11,7 +11,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   const compareWithBranch = vscode.commands.registerCommand(
     "git-differ.compareWithBranch",
-    async (uri: vscode.Uri) => {
+    async (uri: vscode.Uri | undefined) => {
+      if (!uri) {
+        uri = vscode.window.activeTextEditor?.document.uri;
+      }
+      if (!uri) {
+        vscode.window.showErrorMessage("No file selected");
+        return;
+      }
       const branches = await getBranches(gitApi, uri, !localOnly);
       const branchNames = branches
         .map((branch) => branch.name)
