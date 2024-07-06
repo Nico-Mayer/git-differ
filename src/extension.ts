@@ -67,8 +67,22 @@ export function activate(context: vscode.ExtensionContext) {
 
   const compareWithCommit = vscode.commands.registerCommand(
     "git-differ.compareWithCommit",
-    async () => {
-      vscode.window.showErrorMessage("test");
+    async (uri: vscode.Uri | undefined) => {
+      if (!uri) {
+        uri = vscode.window.activeTextEditor?.document.uri;
+      }
+      if (!uri) {
+        vscode.window.showErrorMessage("No file selected");
+        return;
+      }
+      const repo = gitApi.getRepository(uri);
+
+      const branchName = repo?.state.HEAD?.name;
+      if (branchName !== undefined) {
+        const branch = repo?.getBranch(branchName);
+      }
+
+      vscode.window.showWarningMessage(`test ${branchName}`);
     }
   );
 
