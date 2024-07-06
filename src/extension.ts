@@ -65,7 +65,14 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(compareWithBranch);
+  const compareWithCommit = vscode.commands.registerCommand(
+    "git-differ.compareWithCommit",
+    async () => {
+      vscode.window.showErrorMessage("test");
+    }
+  );
+
+  context.subscriptions.push(compareWithBranch, compareWithCommit);
 }
 
 export function deactivate() {}

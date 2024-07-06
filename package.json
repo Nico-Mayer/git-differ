@@ -9,6 +9,11 @@
         "category": "Git",
         "command": "git-differ.compareWithBranch",
         "title": "Git Differ: Compare with Branch..."
+      },
+      {
+        "category": "Git",
+        "command": "git-differ.compareWithCommit",
+        "title": "Git Differ: Compare with Commit..."
       }
     ],
     "configuration": {
@@ -25,6 +30,11 @@
       "explorer/context": [
         {
           "command": "git-differ.compareWithBranch",
+          "group": "Git@15",
+          "when": "!explorerResourceIsFolder"
+        },
+        {
+          "command": "git-differ.compareWithCommit",
           "group": "Git@15",
           "when": "!explorerResourceIsFolder"
         }
