@@ -77,12 +77,57 @@ export function activate(context: vscode.ExtensionContext) {
       }
       const repo = gitApi.getRepository(uri);
 
-      const branchName = repo?.state.HEAD?.name;
-      if (branchName !== undefined) {
-        const branch = repo?.getBranch(branchName);
+      if (!repo) {
+        vscode.window.showErrorMessage("No repository found");
+        return;
       }
 
-      vscode.window.showWarningMessage(`test ${branchName}`);
+      try {
+        const filePath = repo.rootUri.fsPath
+          ? uri.fsPath.replace(repo.rootUri.fsPath + "/", "")
+          : uri.fsPath;
+        const commits = await repo.log({ maxEntries: 1000, path: filePath });
+
+        commits.sort((a, b) => {
+          if (a.commitDate === undefined) {
+            return -1;
+          }
+          if (b.commitDate === undefined) {
+            return 1;
+          }
+          return b.commitDate.getTime() - a.commitDate.getTime();
+        });
+
+        const quickPickItems: vscode.QuickPickItem[] = commits.map((commit) => {
+          return {
+            label: commit.hash,
+            description: `${commit.commitDate?.toUTCString()}`,
+            detail: `${commit.authorName}: ${commit.message}`,
+          };
+        });
+
+        const selectedCommit = await vscode.window.showQuickPick(
+          quickPickItems,
+          {
+            placeHolder:
+              "Select a branch to compare with or search commit hash",
+          }
+        );
+
+        if (selectedCommit) {
+          const selectedCommitHash = selectedCommit.label;
+          const gitUri = gitApi.toGitUri(uri, selectedCommitHash);
+
+          await vscode.commands.executeCommand(
+            "vscode.diff",
+            gitUri,
+            uri,
+            `Comparing file changes with commit ${selectedCommitHash}`
+          );
+        }
+      } catch (error) {
+        vscode.window.showErrorMessage(`An error occurred: ${error}`);
+      }
     }
   );
 

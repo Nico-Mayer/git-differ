@@ -13,15 +13,14 @@
 
 This lightweight and speedy VS Code extension allows you to effortlessly compare any file in your project with local or remote git branches directly from your context menu.
 
-### Features
-
-- View file differences directly from the context menu
-- Extremely lightweight without unnecessary features
+- Context Menu Comparison Tool
+  1. Compare any file against another Git branch.
+  2. Compare any file against a specific commit.
+- Minimalist Design
+  - Extremely lightweight with only essential features.
 
 ### Roadmap
 
-- Compare changes with commits on the current branch (next-up)
-- Compare the latest commit on the current branch to any commit in another branch using SHA ID (low-prio)
 - Statusbar Git blame (low-prio)
 
 ### Download
