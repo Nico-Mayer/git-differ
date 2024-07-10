@@ -4,7 +4,7 @@ All notable changes to the "git-differ" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [v0.2.1]
+## [v0.2.2]
 
 ### Added
 
