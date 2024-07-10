@@ -4,6 +4,17 @@ All notable changes to the "git-differ" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [v0.2.1]
+
+### Added
+
+- Setting `commitHistoryLength`
+- QuickPick option Icons and dividers
+
+### Changes
+
+- How settings get picked up sow they now take effect instantly
+
 ## [Unreleased]
 
 - Initial release
