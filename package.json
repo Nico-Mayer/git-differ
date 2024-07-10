@@ -23,6 +23,11 @@
           "default": false,
           "description": "If turned on, only local branches will be shown in the compare with branch menu.",
           "type": "boolean"
+        },
+        "git-differ.commitHistoryLength": {
+          "default": 1000,
+          "description": "Determines the length of the git history and the number of commits fetched during the Compare with commit command.",
+          "type": "number"
         }
       }
     },

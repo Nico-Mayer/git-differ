@@ -2,12 +2,8 @@ import * as vscode from "vscode";
 import { API, GitExtension, Ref } from "./git";
 
 export function activate(context: vscode.ExtensionContext) {
-  const gitExtension =
-    vscode.extensions.getExtension<GitExtension>("vscode.git")!.exports;
+  const gitExtension = vscode.extensions.getExtension<GitExtension>("vscode.git")!.exports;
   const gitApi: API = gitExtension.getAPI(1);
-
-  const config = vscode.workspace.getConfiguration("git-differ");
-  const localOnly = config.get<boolean>("localOnly", false);
 
   const compareWithBranch = vscode.commands.registerCommand(
     "git-differ.compareWithBranch",
@@ -19,37 +15,30 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage("No file selected");
         return;
       }
+      const localOnly = vscode.workspace
+        .getConfiguration("git-differ")
+        .get<boolean>("localOnly", false);
       const branches = await getBranches(gitApi, uri, !localOnly);
-      const branchNames = branches
-        .map((branch) => branch.name)
-        .filter((name): name is string => !!name);
 
-      const selectedBranchName = await vscode.window.showQuickPick(
-        branchNames,
-        {
-          placeHolder: "Select a branch to compare with",
-        }
-      );
+      const quickPickItems: vscode.QuickPickItem[] = genBranchQuickPickItems(branches, localOnly);
 
-      if (!selectedBranchName) {
+      const selectedBranch = await vscode.window.showQuickPick(quickPickItems, {
+        placeHolder: "Select a branch to compare with",
+      });
+
+      if (!selectedBranch) {
         vscode.window.showErrorMessage("No branch selected");
         return;
       }
 
-      const branch = branches.find(
-        (branch) => branch.name === selectedBranchName
-      );
+      const branch = branches.find((branch) => branch.name === selectedBranch.label);
       if (!branch) {
-        vscode.window.showErrorMessage(
-          `Branch not found: ${selectedBranchName}`
-        );
+        vscode.window.showErrorMessage(`Branch not found: ${selectedBranch.label}`);
         return;
       }
 
       if (branch.name === undefined) {
-        vscode.window.showErrorMessage(
-          `Branch Name is undefined: ${selectedBranchName}`
-        );
+        vscode.window.showErrorMessage(`Branch Name is undefined: ${selectedBranch.label}`);
         return;
       }
 
@@ -82,11 +71,15 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      const commitHistoryLength = vscode.workspace
+        .getConfiguration("git-differ")
+        .get<number>("commitHistoryLength", 1000);
+
       try {
         const filePath = repo.rootUri.fsPath
           ? uri.fsPath.replace(repo.rootUri.fsPath + "/", "")
           : uri.fsPath;
-        const commits = await repo.log({ maxEntries: 1000, path: filePath });
+        const commits = await repo.log({ maxEntries: commitHistoryLength, path: filePath });
 
         commits.sort((a, b) => {
           if (a.commitDate === undefined) {
@@ -106,13 +99,9 @@ export function activate(context: vscode.ExtensionContext) {
           };
         });
 
-        const selectedCommit = await vscode.window.showQuickPick(
-          quickPickItems,
-          {
-            placeHolder:
-              "Select a branch to compare with or search commit hash",
-          }
-        );
+        const selectedCommit = await vscode.window.showQuickPick(quickPickItems, {
+          placeHolder: "Select a branch to compare with or search commit hash",
+        });
 
         if (selectedCommit) {
           const selectedCommitHash = selectedCommit.label;
@@ -136,19 +125,52 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-async function getBranches(
-  gitApi: API,
-  uri: vscode.Uri,
-  remote: boolean
-): Promise<Ref[]> {
+async function getBranches(gitApi: API, uri: vscode.Uri, remote: boolean): Promise<Ref[]> {
   const repo = gitApi.getRepository(uri);
 
   if (!repo) {
-    vscode.window.showErrorMessage(
-      `Repository not found for URI: ${uri.toString()}`
-    );
+    vscode.window.showErrorMessage(`Repository not found for URI: ${uri.toString()}`);
     return [];
   }
 
   return await repo.getBranches({ remote });
+}
+
+function genBranchQuickPickItems(branches: Ref[], localOnly: boolean): vscode.QuickPickItem[] {
+  const localBranches = branches.filter((branch) => {
+    if (!branch.remote) {
+      return branch;
+    }
+  });
+
+  const remoteBranches = branches.filter((branch) => {
+    if (branch.remote) {
+      return branch;
+    }
+  });
+
+  const toQuickPickItems = (branches: Ref[], iconId: string): vscode.QuickPickItem[] => {
+    return branches.map((branch) => {
+      return { label: branch.name || "unknown", iconPath: new vscode.ThemeIcon(iconId) };
+    });
+  };
+
+  const localBranchesItems = toQuickPickItems(localBranches, "git-branch");
+  const remoteBranchesItems = toQuickPickItems(remoteBranches, "cloud");
+
+  const divider = (label: string): vscode.QuickPickItem => {
+    return {
+      label,
+      kind: -1,
+    };
+  };
+
+  const dividerRemote = divider("remote branches");
+  const dividerLocal = divider("local branches");
+
+  if (localOnly) {
+    return [dividerLocal, ...localBranchesItems];
+  }
+
+  return [dividerLocal, ...localBranchesItems, dividerRemote, ...remoteBranchesItems];
 }
