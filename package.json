@@ -105,7 +105,9 @@
   "scripts": {
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
     "vscode:prepublish": "npm run compile",
+    "release": "vsce publish",
     "release:path": "vsce publish path",
     "release:minor": "vsce publish minor",
     "release:major": "vsce publish major",
