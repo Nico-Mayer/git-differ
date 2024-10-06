@@ -113,5 +113,5 @@
     "release:major": "vsce publish major",
     "prepare": "husky install"
   },
-  "version": "0.2.3"
+  "version": "1.0.0"
 }
