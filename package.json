@@ -43,6 +43,18 @@
           "group": "Git@15",
           "when": "!explorerResourceIsFolder"
         }
+      ],
+      "editor/title/context": [
+        {
+          "command": "git-differ.compareWithBranch",
+          "group": "Git@15",
+          "when": "true"
+        },
+        {
+          "command": "git-differ.compareWithCommit",
+          "group": "Git@15",
+          "when": "true"
+        }
       ]
     }
   },

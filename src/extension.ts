@@ -1,5 +1,13 @@
 import * as vscode from "vscode";
-import { API, GitExtension, Ref } from "./git";
+import { API, GitExtension, RefType } from "./git";
+
+type Branch = {
+  tags: (string | undefined)[];
+  type: RefType;
+  name?: string;
+  commit?: string;
+  remote?: string;
+};
 
 export function activate(context: vscode.ExtensionContext) {
   const gitExtension = vscode.extensions.getExtension<GitExtension>("vscode.git")!.exports;
@@ -125,7 +133,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-async function getBranches(gitApi: API, uri: vscode.Uri, remote: boolean): Promise<Ref[]> {
+async function getBranches(gitApi: API, uri: vscode.Uri, remote: boolean): Promise<Branch[]> {
   const repo = gitApi.getRepository(uri);
 
   if (!repo) {
@@ -133,10 +141,22 @@ async function getBranches(gitApi: API, uri: vscode.Uri, remote: boolean): Promi
     return [];
   }
 
-  return await repo.getBranches({ remote });
+  const branches = await repo.getBranches({ remote });
+
+  const tags = await repo.getRefs({ pattern: "refs/tags/*" });
+
+  const branchesWithTags = branches.map((branch) => {
+    const branchTags = tags.filter((tag) => tag.commit === branch.commit);
+    return {
+      ...branch,
+      tags: branchTags.map((tag) => tag.name),
+    };
+  });
+
+  return branchesWithTags;
 }
 
-function genBranchQuickPickItems(branches: Ref[], localOnly: boolean): vscode.QuickPickItem[] {
+function genBranchQuickPickItems(branches: Branch[], localOnly: boolean): vscode.QuickPickItem[] {
   const localBranches = branches.filter((branch) => {
     if (!branch.remote) {
       return branch;
@@ -149,9 +169,13 @@ function genBranchQuickPickItems(branches: Ref[], localOnly: boolean): vscode.Qu
     }
   });
 
-  const toQuickPickItems = (branches: Ref[], iconId: string): vscode.QuickPickItem[] => {
+  const toQuickPickItems = (branches: Branch[], iconId: string): vscode.QuickPickItem[] => {
     return branches.map((branch) => {
-      return { label: branch.name || "unknown", iconPath: new vscode.ThemeIcon(iconId) };
+      return {
+        label: branch.name || "unknown",
+        iconPath: new vscode.ThemeIcon(iconId),
+        description: branch.tags.length ? `Tags: ${branch.tags.join(", ")}` : "",
+      };
     });
   };
 

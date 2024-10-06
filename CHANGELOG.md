@@ -4,6 +4,13 @@ All notable changes to the "git-differ" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [v0.2.3]
+
+### Added
+
+- Tags to compare with Branch view
+- Git diff functions can be executed from file tabs
+
 ## [v0.2.2]
 
 ### Added
