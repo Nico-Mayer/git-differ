@@ -1,7 +1,8 @@
 {
   "activationEvents": [],
   "categories": [
-    "Other"
+    "Other",
+    "SCM Providers"
   ],
   "contributes": {
     "commands": [
@@ -62,6 +63,8 @@
   "readme": "README.md",
   "description": "Easily compare project file differences across multiple branches using the context menu.",
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
     "@types/vscode": "^1.91.0",
@@ -70,9 +73,10 @@
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^8.57.0",
+    "husky": "^8.0.0",
     "typescript": "^5.5.3"
   },
-  "displayName": "Git differ",
+  "displayName": "Git Differ",
   "engines": {
     "vscode": "^1.91.0"
   },
@@ -104,7 +108,8 @@
     "pretest": "npm run compile && npm run lint",
     "test": "vscode-test",
     "vscode:prepublish": "npm run compile",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "prepare": "husky install"
   },
   "version": "0.2.3"
 }
