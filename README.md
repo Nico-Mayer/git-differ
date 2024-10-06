@@ -31,6 +31,12 @@ This lightweight and speedy VS Code extension allows you to effortlessly compare
 
 [Download from Marketplace](https://marketplace.visualstudio.com/items?itemName=nico-mayer.git-differ)
 
+## Support
+
+If you like the Project, your support would mean the world to me!
+
+[![Buy Me a Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=☕&slug=nima94&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff)](https://www.buymeacoffee.com/nima94)
+
 ## License
 
 MIT License © 2024 [Nico Mayer](https://github.com/nico-mayer)

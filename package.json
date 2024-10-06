@@ -105,10 +105,10 @@
   "scripts": {
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
-    "pretest": "npm run compile && npm run lint",
-    "test": "vscode-test",
     "vscode:prepublish": "npm run compile",
-    "watch": "tsc -watch -p ./",
+    "release:path": "vsce publish path",
+    "release:minor": "vsce publish minor",
+    "release:major": "vsce publish major",
     "prepare": "husky install"
   },
   "version": "0.2.3"
