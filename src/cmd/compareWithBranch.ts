@@ -9,6 +9,39 @@ type Branch = {
   remote?: string;
 };
 
+export async function executeDiffComparison(
+  gitApi: API,
+  uri: vscode.Uri,
+  branchName: string
+): Promise<void> {
+  const gitUri = gitApi.toGitUri(uri, branchName);
+  const filePath = uri.path.split("/").pop() || uri.path;
+
+  await vscode.commands.executeCommand("vscode.diff", gitUri, uri, `${branchName} ↔ ${filePath}`);
+}
+
+export async function findMasterBranch(gitApi: API, uri: vscode.Uri): Promise<Branch | null> {
+  try {
+    const localBranches = await getBranches(gitApi, uri, false);
+
+    let masterBranch = localBranches.find((branch) => branch.name === "master");
+    if (!masterBranch) {
+      masterBranch = localBranches.find((branch) => branch.name === "main");
+    }
+
+    if (!masterBranch) {
+      const remoteBranches = await getBranches(gitApi, uri, true);
+      masterBranch = remoteBranches.find(
+        (branch) => branch.name === "origin/master" || branch.name === "origin/main"
+      );
+    }
+
+    return masterBranch || null;
+  } catch (error) {
+    return null;
+  }
+}
+
 export function newCompareWithBranch(gitApi: API): vscode.Disposable {
   return vscode.commands.registerCommand(
     "git-differ.compareWithBranch",
@@ -47,15 +80,11 @@ export function newCompareWithBranch(gitApi: API): vscode.Disposable {
         return;
       }
 
-      const gitUri = gitApi.toGitUri(uri, branch.name);
-      const filePath = uri.path.split("/").pop() || uri.path;
-
-      vscode.commands.executeCommand(
-        "vscode.diff",
-        gitUri,
-        uri,
-        `${branch.name} compared with "${filePath}"`
-      );
+      try {
+        await executeDiffComparison(gitApi, uri, branch.name);
+      } catch (error) {
+        vscode.window.showErrorMessage(`An error occurred: ${error}`);
+      }
     }
   );
 }

@@ -15,6 +15,11 @@
         "category": "Git",
         "command": "git-differ.compareWithCommit",
         "title": "Git Differ: Compare with Commit"
+      },
+      {
+        "category": "Git",
+        "command": "git-differ.compareWithMaster",
+        "title": "Git Differ: Compare with Master"
       }
     ],
     "configuration": {
@@ -43,6 +48,11 @@
           "command": "git-differ.compareWithCommit",
           "group": "Git@15",
           "when": "!explorerResourceIsFolder"
+        },
+        {
+          "command": "git-differ.compareWithMaster",
+          "group": "Git@15",
+          "when": "!explorerResourceIsFolder"
         }
       ],
       "editor/title/context": [
@@ -53,6 +63,11 @@
         },
         {
           "command": "git-differ.compareWithCommit",
+          "group": "Git@15",
+          "when": "true"
+        },
+        {
+          "command": "git-differ.compareWithMaster",
           "group": "Git@15",
           "when": "true"
         }
